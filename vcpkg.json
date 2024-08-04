@@ -1,0 +1,16 @@
+{
+  "name": "ep18",
+  "version-string": "0.1.0",
+  "dependencies": [
+    {
+      "name": "imgui",
+      "features": [
+        "opengl3-binding",
+        "glfw-binding",
+        "glut-binding"
+      ]
+    },
+    "opengl",
+    "glew"
+  ]
+}
