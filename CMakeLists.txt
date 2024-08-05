@@ -54,3 +54,10 @@ target_link_libraries(${TARGET_NAME} PUBLIC
 target_include_directories(${TARGET_NAME}
   PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
+
+# have CMake export the commands we need to send to the compiler (things
+# like include path and compiler switches). This writes the file 
+# compile_commands.json to the build folder where the c_cpp_properties.json
+# file will refer to it and use it for vscode's intellisense 
+# compiler settings
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
