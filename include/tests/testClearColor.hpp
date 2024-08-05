@@ -4,7 +4,7 @@
 
 namespace Test {
 
-  class TestClearColor : Test
+  class TestClearColor : public Test
   {
   public:
     TestClearColor();
@@ -13,6 +13,7 @@ namespace Test {
     void OnUpdate(float deltaTime) override;
     void OnRender() override;
     void OnImGuiRender() override;
+    const char* testName() const override { return "Clear Color"; };
   
   private:
     float m_color[4];
