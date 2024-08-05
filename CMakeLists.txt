@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.30)
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS ON)
-set (TARGET_NAME ep23)
-set (PROJECT_NAME ep23)
+set (TARGET_NAME ogls)
+set (PROJECT_NAME ogls)
 
 
 # Add the DEBUG definition for debug builds
