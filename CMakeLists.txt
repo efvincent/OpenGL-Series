@@ -32,6 +32,7 @@ find_package(imgui CONFIG REQUIRED)
 add_executable(${TARGET_NAME}
   src/vendor/stb_image.cpp
   src/main.cpp
+  src/tests/test.cpp
   src/tests/testClearColor.cpp
   src/bufferLayout.cpp
   src/vertexArray.cpp
