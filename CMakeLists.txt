@@ -6,6 +6,12 @@ set (CMAKE_CXX_EXTENSIONS ON)
 set (TARGET_NAME ogls)
 set (PROJECT_NAME ogls)
 
+# have CMake export the commands we need to send to the compiler (things
+# like include path and compiler switches). This writes the file 
+# compile_commands.json to the build folder where the c_cpp_properties.json
+# file will refer to it and use it for vscode's intellisense 
+# compiler settings
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Add the DEBUG definition for debug builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -13,7 +19,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 set(VCPKG_ROOT_DIR $ENV{VCPKG_ROOT})
-message("${VCPKG_ROOT_DIR}")
 
 # Tell CMake where to find vcpkg's CMake toolchain file
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake" CACHE PATH "")
@@ -27,6 +32,8 @@ find_package(GLEW REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 
 # set up the computation units to be compiled for the target executable
 add_executable(${TARGET_NAME}
@@ -51,15 +58,11 @@ target_link_libraries(${TARGET_NAME} PUBLIC
   GLEW::GLEW
   GLUT::GLUT
   imgui::imgui
-  glm::glm)
+  glm::glm
+  PRIVATE fmt::fmt
+  PRIVATE "${spdlog_LIBRARIES}")
 
 target_include_directories(${TARGET_NAME}
   PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  "{$spdlog_INCLUDE_DIRS}"
 )
-
-# have CMake export the commands we need to send to the compiler (things
-# like include path and compiler switches). This writes the file 
-# compile_commands.json to the build folder where the c_cpp_properties.json
-# file will refer to it and use it for vscode's intellisense 
-# compiler settings
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
