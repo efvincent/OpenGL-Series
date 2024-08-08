@@ -18,7 +18,6 @@
 #include "imgui_impl_opengl3.h"
 #include "renderer.hpp"
 #include "tests/test.hpp"
-#include "tests/testClearColor.hpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     GLCall(glViewport(0,0,width,height));   
@@ -63,7 +62,7 @@ GLFWwindow* setup() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplOpenGL3_Init("#version 430");
     ImGui::StyleColorsDark();
 
     // set alpha blending
@@ -84,9 +83,9 @@ int main(void)
     GLFWwindow* window = setup();
 
     std::vector<std::unique_ptr<Test::Test>> tests;
-    tests.push_back(std::make_unique<Test::TestClearColor>());
+    tests.push_back(std::make_unique<Test::TestMenu>());
 
-    int curTestIdx{-1};
+    Test::TestMenu menu; 
 
     /*------------------------------------------*/
     /*------------- RENDER LOOP ----------------*/
@@ -100,20 +99,9 @@ int main(void)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        if (ImGui::Begin("Tests")) {
-            for(int i = 0; i < tests.size(); i++) {
-                if(ImGui::Selectable(tests[i]->testName(), curTestIdx == 0)) {
-                    curTestIdx = 0;
-                }
-            }
-        }
-        ImGui::End();
-
-        if (curTestIdx >= 0 && curTestIdx < tests.size()) {
-            tests[curTestIdx]->OnUpdate(0.0f);
-            tests[curTestIdx]->OnRender();
-            tests[curTestIdx]->OnImGuiRender();
-        }
+        menu.OnUpdate(0.0f);
+        menu.OnRender();
+        menu.OnImGuiRender();        
 
         /*------------- Input handler ----------------*/
         processInput(window);

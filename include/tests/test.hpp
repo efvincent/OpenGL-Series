@@ -24,7 +24,7 @@ namespace Test {
     void OnRender() override;
     void OnImGuiRender() override;
   private:
-    Test m_current_test;
-    std::vector<std::pair<std::string, std::function<Test*>>> m_tests;
+    Test* m_current_test;
+    std::vector<std::pair<std::string, std::function<Test*()>>> m_tests;
   };
 }
