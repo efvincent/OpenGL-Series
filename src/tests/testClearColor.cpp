@@ -1,13 +1,16 @@
 #include "tests/testClearColor.hpp"
 #include "glAssert.hpp"
 #include <imgui.h> 
+#include <spdlog/spdlog.h>
 
 namespace Test {
 
     TestClearColor::TestClearColor()
       : m_color { 0.2f, 0.3f, 0.8f, 1.0f } {}
 
-    TestClearColor::~TestClearColor() { }
+    TestClearColor::~TestClearColor() { 
+      spdlog::trace("TestClearColor Destructor");
+    }
 
     void TestClearColor::OnUpdate(float deltaTime) { }
 

@@ -3,6 +3,7 @@
   "version": "0.23.1",
   "dependencies": [
     "glew",
+    "glfw3",
     "glm",
     {
       "name": "imgui",
@@ -13,6 +14,7 @@
       ]
     },
     "opengl",
-    "glfw3"
+    "spdlog",
+    "fmt"
   ]
 }
