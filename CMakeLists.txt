@@ -33,6 +33,7 @@ add_executable(${TARGET_NAME}
   src/vendor/stb_image.cpp
   src/main.cpp
   src/tests/testClearColor.cpp
+  src/tests/testMenu.cpp
   src/bufferLayout.cpp
   src/vertexArray.cpp
   src/vertexBuffer.cpp

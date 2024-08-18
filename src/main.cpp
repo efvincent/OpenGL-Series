@@ -20,6 +20,8 @@
 #include "tests/test.hpp"
 #include "tests/testClearColor.hpp"
 
+#pragma region setup and support
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     GLCall(glViewport(0,0,width,height));   
 }
@@ -59,6 +61,10 @@ GLFWwindow* setup() {
     // setting the swap interval to 1 synchronizes the frame rate to the refresh rate
     GLCall(glfwSwapInterval(1));
 
+    // set alpha blending
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); 
+    
     // ImGUI setup
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -66,27 +72,26 @@ GLFWwindow* setup() {
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::StyleColorsDark();
 
-    // set alpha blending
-    GLCall(glEnable(GL_BLEND));
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); 
-    
     if (glewInit() != GLEW_OK) {
       std::cerr << "Error initializing GLEW" << std::endl;
       throw std::runtime_error("could not glewInit()");
     };
 
-    // GLCall(std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl);
+    GLCall(std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl);
     return window;
 }
+
+#pragma endregion
 
 int main(void)
 {
     GLFWwindow* window = setup();
+    
+    Test::Test* currentTest = nullptr;
+    Test::TestMenu* testMenu = new Test::TestMenu(currentTest);
+    currentTest = testMenu;
 
-    std::vector<std::unique_ptr<Test::Test>> tests;
-    tests.push_back(std::make_unique<Test::TestClearColor>());
-
-    int curTestIdx{-1};
+    testMenu->registerTest<Test::TestClearColor>("Clear Color");
 
     /*------------------------------------------*/
     /*------------- RENDER LOOP ----------------*/
@@ -97,25 +102,22 @@ int main(void)
         Renderer::clear();
 
         ImGui_ImplOpenGL3_NewFrame();
+
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        if (ImGui::Begin("Tests")) {
-            for(int i = 0; i < tests.size(); i++) {
-                if(ImGui::Selectable(tests[i]->testName(), curTestIdx == 0)) {
-                    curTestIdx = 0;
-                }
+        
+        if (currentTest) {
+            currentTest->OnUpdate(0.0f);
+            currentTest->OnRender();
+            ImGui::Begin("Test");
+            if(currentTest != testMenu && ImGui::Button("<-")) {
+                delete currentTest;
+                currentTest = testMenu;
             }
-        }
-        ImGui::End();
-
-        if (curTestIdx >= 0 && curTestIdx < tests.size()) {
-            tests[curTestIdx]->OnUpdate(0.0f);
-            tests[curTestIdx]->OnRender();
-            tests[curTestIdx]->OnImGuiRender();
+            currentTest->OnImGuiRender();
+            ImGui::End();
         }
 
-        /*------------- Input handler ----------------*/
         processInput(window);
 
         ImGui::Render();
@@ -124,9 +126,13 @@ int main(void)
         GLCall(glfwSwapBuffers(window));
         GLCall(glfwPollEvents());
     }
+    delete currentTest;
+    if (currentTest != testMenu) {
+        delete testMenu;
+    }
 
     /*------------- Clean up and end the program ----------------*/
-    
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
