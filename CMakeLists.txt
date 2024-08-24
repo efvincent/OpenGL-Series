@@ -34,6 +34,7 @@ add_executable(${TARGET_NAME}
   src/main.cpp
   src/tests/testClearColor.cpp
   src/tests/testMenu.cpp
+  src/tests/testTexture2D.cpp
   src/bufferLayout.cpp
   src/vertexArray.cpp
   src/vertexBuffer.cpp

@@ -6,19 +6,18 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <imgui_impl_glfw.h>
 #include <iostream>
-#include <memory>
 #include <stdexcept>
 #include <csignal>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "glAssert.hpp"
 #include <imgui.h>
-#include <vector>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "renderer.hpp"
 #include "tests/test.hpp"
 #include "tests/testClearColor.hpp"
+#include "tests/testTexture2D.hpp"
 
 #pragma region setup and support
 
@@ -92,7 +91,8 @@ int main(void)
     currentTest = testMenu;
 
     testMenu->registerTest<Test::TestClearColor>("Clear Color");
-
+    testMenu->registerTest<Test::TestTexture2D>("2D Texture");
+    
     /*------------------------------------------*/
     /*------------- RENDER LOOP ----------------*/
     /*------------------------------------------*/
